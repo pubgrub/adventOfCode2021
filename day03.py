@@ -38,7 +38,6 @@ epsilon = int(epsilonString, 2)
 print( "Result Task 1: gamma: ", gamma, "epsilon: ", epsilon, "solution: ", gamma * epsilon)
 
 #Task 2
-
 def getBitOneCount( bitList, pos, bitStr):
     count = 0
     for sample in bitList:
