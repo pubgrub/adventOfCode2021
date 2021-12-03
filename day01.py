@@ -15,7 +15,7 @@ for i in range( 1,len(depths)):
         result += 1
 print( "Result Task 1: " , result)
 
-#Aufgabe 2
+#Task 2
 result = 0
 lasttriple = 0
 for i in range( 0,len(depths)-2):
