@@ -1,5 +1,5 @@
 # AdventOfCode 2021
-# Day 1
+# Day 2
 
 #get input data
 command = []
@@ -10,8 +10,6 @@ with open( "02.data", "r") as file:
         command.append( c)
         commandvalue.append( int(v))
 file.close()
-
-print( command, commandvalue)
 
 #Task 1
 x = 0
