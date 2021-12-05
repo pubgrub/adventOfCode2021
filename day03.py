@@ -42,10 +42,10 @@ def getNewList( inputList, bitPosition, mostCommon):
     for testStr in inputList:
         if testStr[bitPosition] == "1":
             count += 1
-    # mostCommon 1, count >= -> wähle 1
-    #                     < -> wähle 0
-    #            0        >=  ->      0
-    #                     <  ->      1
+    # mostCommon 1, count >= : targetBit 1
+    #                     <  :           0
+    #            0        >= :           0
+    #                     <  :           1
     targetBit = str( mostCommon) if count >= len(inputList) / 2 else str( 1 - mostCommon)
     newList = []
     for testStr in inputList:
