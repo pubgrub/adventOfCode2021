@@ -8,8 +8,6 @@ with open( "03.data", "r") as file:
         sampleList.append( line.rstrip())
 file.close()
 
-#sampleList = [ "0010", "0110", "0000", "1100"]
-
 #Task 1
 ones = []
 samples = len(sampleList)
@@ -38,37 +36,27 @@ epsilon = int(epsilonString, 2)
 print( "Result Task 1: gamma: ", gamma, "epsilon: ", epsilon, "solution: ", gamma * epsilon)
 
 #Task 2
-def getBitOneCount( bitList, pos, bitStr):
+
+def getNewList( inputList, bitPosition, mostCommon):
     count = 0
-    for sample in bitList:
-        if( sample[pos] == bitStr):
-            count +=1
-    return count
-
-def getResultList( inputList, bitPosition, searchBit):
-    resultList = []
-    for str in inputList:
-        if int(str[ bitPosition]) ==  searchBit:
-            resultList.append( str)
-    return resultList
-
-#mostOrLeast: 1 = most common, 0 = least common
-def getNumber( searchList, searchBit, mostOrLeast):
-    sampleList = list( searchList)
+    for testStr in inputList:
+        if testStr[bitPosition] == "1":
+            count += 1
+    # mostCommon 1, count >= -> wähle 1
+    #                     < -> wähle 0
+    #            0        >=  ->      0
+    #                     <  ->      1
+    targetBit = str( mostCommon) if count >= len(inputList) / 2 else str( 1 - mostCommon)
     newList = []
-    for bitPosition in range(0,len(sampleList[0])):
-        count = getBitOneCount( sampleList, bitPosition, searchBit)
-        commonBit = searchBit if count >= len(sampleList) / 2 else 1 - searchBit
-        if not mostOrLeast:
-            commonBit = 1 - commonBit
-        sampleList = getResultList( sampleList, bitPosition, commonBit)    
-        if len( sampleList) == 1:
-            return sampleList[0]
+    for testStr in inputList:
+        if testStr[bitPosition] == targetBit:
+            newList.append( testStr)
+    if len(newList) == 1:
+        return newList[0]
+    return getNewList( newList, bitPosition + 1, mostCommon)
 
-
-oxygen = int(getNumber( sampleList, 1, 1), 2)
-co2 = int( getNumber( sampleList, 1, 0), 2)
-
+oxygen = int(getNewList( sampleList, 0, 1), 2)
+co2 = int( getNewList( sampleList, 0, 0), 2)
 
 print( "Result Task 2: Oxygen: ", oxygen, "CO2: ", co2, "solution: ", oxygen * co2)
 
