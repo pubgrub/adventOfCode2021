@@ -18,7 +18,6 @@ for f in fish:
 def slowCalc( fish, days):
     fishList = fish[:]
     for d in range( 0, days):
-        print( d)
         newList = []
         for f in range( len(fishList)):
             if fishList[ f] == 0:
