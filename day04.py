@@ -87,5 +87,27 @@ def solve():
 result = solve()
 print( "Result Task 1: ", result)
 
+# Task 2
+
+bingoBoards = []
+for b in boards:
+  bingoBoards.append( BingoBoard( size, b))
+
+def solve(): 
+  solved = [False] * len(bingoBoards)
+  for d in draws:
+    for b in bingoBoards:
+      b.draw(d)
+      if b.isSolved():
+        solved[bingoBoards.index(b)] = True
+        try:
+          solved.index(False)
+        except:
+          return( b.getValue() * d)
+  return 0
+
+result = solve()
+print( "Result Task 2: ", result)
+
 
 
