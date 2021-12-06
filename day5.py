@@ -14,9 +14,6 @@ class Vent:
     def __init__(self, coordString):
         [self.x1, self.y1, self.x2, self.y2] = [int(x) for x in coordString.split(',')]
 
-    def getCoords(self):
-        return( [[ self.x1, self.y1], [self.x2, self.y2]])
-
     def getAllPoints(self):
         if self.isHorizontal():
             return( [(x, self.y1) for x in range( min( self.x1, self.x2), max(self.x1, self.x2 ) +1)])
