@@ -11,24 +11,24 @@ with open( "04.data", "r") as file:
     lines.append( line.rstrip())
 file.close()
 
-draws = lines[0].split( ",")
+draws = [ int(x) for x in lines[0].split( ",")]
 del lines[0:2]
-print( lines[0])
 
 boards = []
 board = []
+size = 0
 for l in lines:
    if len(l) != 0:
      board.extend( int(i) for i in l.split())
    else:
+     if size == 0:
+       size = int( len(board)**0.5 )
      boards.append( board)
      board = []
 if board != []:
   boards.append( board)
 
-
 class BingoBoard:    
-  
   def __init__(self, size, ints): # constructor method
     self.boardSize = size
     if len( ints) != self.boardSize**2:
@@ -72,14 +72,20 @@ class BingoBoard:
 
 # Task 1
 
-b = BingoBoard( 3, [17,58,52,49,72,33,55,73,27])
-print( b)
-b.draw( 51)
-b.draw( 52)
-print( b)
-print( b.isSolved())
-b.draw( 17)
-b.draw( 58)
-print( b.isSolved())
-print( b)
-print( b.getValue())
+bingoBoards = []
+for b in boards:
+  bingoBoards.append( BingoBoard( size, b))
+
+def solve(): 
+  for d in draws:
+    for b in bingoBoards:
+      b.draw(d)
+      if b.isSolved():
+        return( b.getValue() * d)
+  return 0
+
+result = solve()
+print( "Result Task 1: ", result)
+
+
+
