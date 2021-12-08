@@ -33,40 +33,47 @@ print( "Result Task 1: ", result)
 segToNum = [ 'ABCEFG', 'CF', 'ACDEG', 'ACDFG', 'BCDF', 'ABDFG', 'ABDEFG', 'ACF', 'ABCDEFG', 'ABCDFG']
 
 sum = 0
+
 for d in range( 0,len( digits)):
-    hints = {}
+    #decode wrong signals
+    signal = {}
     sets = []
     dlist = digits[d].split()
     dlist.sort( key = len)
     for dl in dlist:
         sets.append( set(list(dl)))
-    hints[ 'A'] = sets[1] - sets[0]
+    signal[ 'A'] = sets[1] - sets[0]
     for s in [ x for x in sets[3:6]]:
         if sets[ 0].issubset( s):
             # 3
-            hints[ 'G'] = s - sets[ 2]- hints[ 'A']
-            hints[ 'D'] = s - sets[0] - hints[ 'A'] - hints[ 'G']
-            hints[ 'B'] = sets[ 2] - sets[ 0]- hints[ 'D']
-            hints[ 'E'] = sets[ 9] - s - hints[ 'B']
+            signal[ 'G'] = s - sets[ 2]- signal[ 'A']
+            signal[ 'D'] = s - sets[0] - signal[ 'A'] - signal[ 'G']
+            signal[ 'B'] = sets[ 2] - sets[ 0] - signal[ 'D']
+            signal[ 'E'] = sets[ 9] - s - signal[ 'B']
             break
     for s in [ x for x in sets[3:6]]:
-        if hints[ 'B'].issubset( s):
+        if signal[ 'B'].issubset( s):
             # 5
-            hints[ 'F'] = s - hints[ 'B'] - hints[ 'A'] - hints[ 'D'] - hints[ 'G']
-            hints[ 'C'] = sets[ 0] - hints[ 'F']
+            signal[ 'F'] = s - signal[ 'B'] - signal[ 'A'] - signal[ 'D'] - signal[ 'G']
+            signal[ 'C'] = sets[ 0] - signal[ 'F']
             break
-    nums = []
+    
+    # encode signals to digits
+    signalCode = []
     for n in range( 0, len(segToNum)):
         segs = ''
         for c in segToNum[ n]:
-            segs += next(iter(hints[ c]))
+            segs += next(iter(signal[ c]))
         segs = ''.join(sorted(segs))
-        nums.append( segs)
-    ds = [ ''.join(sorted(x)) for x in display[d][1:].split( ' ')]
-    n = 1000
-    z = 0
-    for digit in ds:
-        z += nums.index( digit) * n
-        n /=10
-    sum += z
-print( "Result Task 2: ", sum)    
+        signalCode.append( segs)
+    
+    #  find digits for outputs and add numbers for result
+    digitCodes = [ ''.join(sorted(x)) for x in display[d][1:].split( ' ')]
+    multiplier = 1000
+    result = 0
+    for code in digitCodes:
+        result += signalCode.index( code) * multiplier
+        multiplier /=10
+    sum += result
+
+print( "Result Task 2: ", int( sum)    )
