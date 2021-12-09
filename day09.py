@@ -3,9 +3,6 @@
 
 #get input data
 
-from types import MemberDescriptorType
-
-
 lines = []
 with open( "09.data", "r") as file:
   for line in file:
