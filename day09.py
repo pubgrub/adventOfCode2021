@@ -20,7 +20,7 @@ lowPoints = []
 for l in range( 0, len(heights)):
     for h in range( 0, len( heights[l])):
         height = heights[l][h]
-        if l > 0 and heights[ l - 1][ h] <= height:
+        if l > 0 and heights[ l - 1][ h] <= height: 
             continue
         if l < len( heights) - 1 and heights[ l + 1][h] <= height:
             continue
@@ -30,7 +30,7 @@ for l in range( 0, len(heights)):
             continue
         #remember for task 2
         lowPoints.append( ( h, l))
-        risk = risk + height + 1
+        risk += ( height + 1)
 
 print( "Result Task 1: ", risk)
 
