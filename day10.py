@@ -47,4 +47,4 @@ for s in remainingStacks:
 scores.sort()
 score = scores[ int( len( scores) / 2)]
 
-print( "Result Task 1: ", score)
+print( "Result Task 2: ", score)
