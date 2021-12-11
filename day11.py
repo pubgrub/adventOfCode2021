@@ -9,6 +9,7 @@ with open( "11.data", "r") as file:
     lines.append( line.rstrip())
 file.close()
 
+#grid has -1 around to test neighbors for border
 bordererdGrid = [ -1] * 12
 for l in lines:
   bordererdGrid.append( -1)
@@ -16,9 +17,7 @@ for l in lines:
   bordererdGrid.append( -1)
 bordererdGrid = bordererdGrid +  [ -1] * 12
 
-width = len(lines[0])
 neighors = [ -13, -12, -11, -1, 1, 11, 12, 13]
-steps = 100
 
 #print function for testing
 def printGrid( grid):
@@ -51,6 +50,7 @@ def raiseEnergy( oct, octs, has_flashed, flashCount):
 octs = bordererdGrid[:]
 has_flashed = set()
 flashCount = 0
+steps = 100
 
 for s in range( steps):
   has_flashed.clear()
@@ -64,10 +64,9 @@ print( "Result Task 1: ", flashCount)
 #Task 2
 
 octs = bordererdGrid[:]
-has_flashed = set()
 
 step = 0
-while len(has_flashed) != width**2:
+while len(has_flashed) != 100:
   step += 1
   has_flashed.clear()
   for o in range(len(octs)):
