@@ -21,16 +21,12 @@ neighors = [ -13, -12, -11, -1, 1, 11, 12, 13]
 
 #print function for testing
 def printGrid( grid):
-  print( "\033[0m")
   for i in range(1,11):
     for j in range(1,11):
       val = grid[ i * 12 + j]
-      valstr = "{0:3d}".format( val)
-      if  val == 0:
-        print( "\033[1;31m" + valstr + "\033[0m" , end = "")
-      else:
-        print( valstr, end = "")
-    print( "\033[0m")
+      valstr = "\033[1;31m" + "{0:3d}".format( val) + "\033[0m" if val == 0 else "{0:3d}".format( val)
+      print( valstr, end = "")
+    print()
 
 def raiseEnergy( oct, octs, has_flashed, flashCount):
   octs[ oct] += 1
