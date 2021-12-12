@@ -3,9 +3,6 @@
 
 #get input data
 
-from typing import Counter
-
-
 lines = []
 with open( "12.data", "r") as file:
   for line in file:
