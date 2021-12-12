@@ -16,8 +16,6 @@ paths = []
 for l in lines:
     paths.append( tuple(l.split('-')))
 
-print( paths)
-
 isMajor = [False, False]
 destinations = [[], []]
 sourceName = ['start', 'end']
@@ -28,8 +26,8 @@ for ( s, d) in paths:
       sourceName.append( p)
       destinations.append( [])
       isMajor.append( True if p.upper() == p else False)
-  destinations[ sourceName.index( s)].append( sourceName.index( p))
-  destinations[ sourceName.index( p)].append( sourceName.index( s))
+  destinations[ sourceName.index( s)].append( sourceName.index( d))
+  destinations[ sourceName.index( d)].append( sourceName.index( s))
 
 #Task 1
 
