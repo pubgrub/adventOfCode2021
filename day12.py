@@ -9,15 +9,15 @@ with open( "12.data", "r") as file:
     lines.append( line.rstrip())
 file.close()
 
-paths = []
+connections = []
 for l in lines:
-    paths.append( tuple(l.split('-')))
+    connections.append( tuple(l.split('-')))
 
 isMajor = [False, False]
 destinations = [[], []]
 sourceName = ['start', 'end']
 
-for ( s, d) in paths:
+for ( s, d) in connections:
   for p in [ s, d]:
     if p not in sourceName:
       sourceName.append( p)
@@ -28,16 +28,16 @@ for ( s, d) in paths:
 
 #Task 1
 
-def walk1( dest, way, count):
-  way = way.copy()
-  if dest == 1:
+def walk1( point, path, count):
+  path = path.copy()
+  if point == 1:
     return count + 1
-  way.append( dest)
-  for d in destinations[ dest]:
-    if d in way and not isMajor[ d]:
+  path.append( point)
+  for d in destinations[ point]:
+    if d in path and not isMajor[ d]:
       continue
     else:
-      count = walk1( d, way, count) 
+      count = walk1( d, path, count) 
   return count
 
 count = walk1( 0, [], 0)
@@ -46,17 +46,17 @@ print( "Result Task 1: ", count)
 
 #Task 2
 
-def walk2( dest, way, count, minorVisited):
-  if dest in way and not isMajor[ dest]:
+def walk2( point, path, count, minorVisited):
+  if point in path and not isMajor[ point]:
     minorVisited = True
-  way = way.copy()
-  if dest == 1:
+  path = path.copy()
+  if point == 1:
     return count + 1
-  way.append( dest)
-  for d in destinations[ dest]:
-    if d == 0 or d in way and not isMajor[ d] and minorVisited:
+  path.append( point)
+  for d in destinations[ point]:
+    if d == 0 or d in path and not isMajor[ d] and minorVisited:
         continue
-    count = walk2( d, way, count, minorVisited) 
+    count = walk2( d, path, count, minorVisited) 
   return count
 
 count = walk2( 0, [], 0, False)
