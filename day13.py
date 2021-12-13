@@ -34,8 +34,9 @@ def doFold( dots, foldDir, foldVal):
                 newDots.append( ( newX, y))
     return newDots
 
-def printDots( dots):
+def generateMatrix( dots):
     maxX = maxY = 0
+    lines = []
     for ( x, y) in dots:
         maxX = max( maxX, x)
         maxY = max( maxY, y)
@@ -43,7 +44,8 @@ def printDots( dots):
         str = ''
         for x in range( maxX + 1):
             str += "O" if ( x, y) in dots else " "
-        print( str)
+        lines.append( str)
+    return lines
 
 #Task 1
 
@@ -58,5 +60,6 @@ for (foldDir, foldVal) in fold:
     dots = doFold( dots, foldDir, foldVal)
 
 print( "Result Task 2: \n")
-printDots( dots)
+for l in generateMatrix( dots):
+    print( l)
 print()
