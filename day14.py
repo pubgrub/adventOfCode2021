@@ -12,10 +12,12 @@ file.close()
 primer = list( lines[0])
 
 insertions = {}
+insertions2 = {}
 for l in lines[ 2:]:
     ( pair, ins) = l.split( ' -> ') 
     (x, y) = list( pair)
     insertions[ (x, y)]= ins
+    insertions2[ pair] = ins
 
 def polymerToStr( poly, next):
     str = ""
@@ -27,7 +29,7 @@ def polymerToStr( poly, next):
 
 
 
-def getPolymer( polymer, steps):
+def getPolymerSlow( polymer, steps):
     nextPiece = []
     for i in range( len(primer) - 1):
         nextPiece.append(  i + 1)
@@ -61,14 +63,24 @@ def getCounts( polymer):
 
 #Task 1
 
-polymer = getPolymer( primer, 10)
+polymer = getPolymerSlow( primer, 10)
 ( minC, maxC) = getCounts( polymer)
 
 print( "Result Task 1: ", maxC - minC)
 
 #Task 2
 
-polymer = getPolymer( primer, 40)
-( minC, maxC) = getCounts( polymer)
+# polymer = getPolymerSlow( primer, 40)
+# ( minC, maxC) = getCounts( polymer)
 
-print( "Result Task 2: ", maxC - minC)
+# print( "Result Task 2: ", maxC - minC)
+
+results = {}
+for i in insertions2:
+    results[ ( i)] = i[0] + insertions2[i] + i[1]
+
+
+
+
+#print( insertions2)
+print( results)
