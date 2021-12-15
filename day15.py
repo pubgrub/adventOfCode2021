@@ -40,23 +40,18 @@ def walk( x, y, risk):
       minRisk = risk
       print( "new minimal risk found: ", minRisk)
     return
-  order = list( range( 4))
-  random.shuffle( order)
-  for i in order:  
-    if i == 0 and (x + 1, y) not in path and x < gridSizeX - 1:
-      walk( x + 1, y, risk)
-      path.popitem()
-    elif i == 1 and (x, y + 1) not in path and y < gridSizeY - 1:
-      walk( x, y + 1, risk)
-      path.popitem()
-      continue
-    elif i == 2 and (x - 1, y) not in path and x > 0:
-      walk( x - 1, y, risk)
-      path.popitem()
-      continue
-    elif i == 3 and (x, y - 1) not in path and y > 0:
-      walk( x, y - 1, risk)
-      path.popitem()
+  if (x + 1, y) not in path and x < gridSizeX - 1:
+    walk( x + 1, y, risk)
+    path.popitem()
+  if (x, y + 1) not in path and y < gridSizeY - 1:
+    walk( x, y + 1, risk)
+    path.popitem()
+  if (x - 1, y) not in path and x > 0:
+    walk( x - 1, y, risk)
+    path.popitem()
+  if (x, y - 1) not in path and y > 0:
+    walk( x, y - 1, risk)
+    path.popitem()
 
 #Task 1
 
