@@ -68,15 +68,11 @@ def solve( grid):
       neighbors.append( (x, y-1))
     if y < gridSizeY - 1:
       neighbors.append( (x, y+1))
-      
-    minRiskOfNeighbors = maxRisk
-    #print( x, y, neighbors, len( toCalc))
+    minRiskOfNeighbors = maxPossibleRisk
     for (xn, yn) in neighbors:
-
       if ( xn, yn) in minPointRisks:
         minRiskOfNeighbors = min( minRiskOfNeighbors, minPointRisks[ ( xn, yn)])
     if ( x, y) not in minPointRisks or minRiskOfNeighbors < minPointRisks[ ( x, y)] - grid[y][x]:
-      #print( x, y)
       minPointRisks[ ( x, y)] = minRiskOfNeighbors + grid[y][x]
       for n in neighbors:
         ( xn, yn) = n
@@ -99,14 +95,12 @@ def buildLargeGrid( grid, mult):
         grid[-1].append( v - 9 if v > 9 else v)
   return grid
 
-
-import time
 #Task 1
 
 minPointRisks = { ( 0,0): 0}
 toCalc = {}
-maxRisk = getInitialMinRisk(grid)
-minRisk = maxRisk
+maxPossibleRisk = getInitialMinRisk(grid)
+minRisk = maxPossibleRisk
 
 riskGrid = {} 
 path = {}
@@ -117,11 +111,9 @@ path = {}
 
 # fastVersion
 
-start1 = time.time()
 solve( grid)
-end1 = time.time()
-print( minPointRisks[ ( gridSizeX - 1, gridSizeY - 1)])
-print( end1 -start1)
+print( "Result Task 1: ", minPointRisks[ ( gridSizeX - 1, gridSizeY - 1)])
+
 #Task 2
 
 grid = buildLargeGrid( grid, 5)
@@ -130,16 +122,13 @@ gridSizeX = len( grid[0])
 
 minPointRisks = { ( 0,0): 0}
 toCalc = {}
-maxRisk = getInitialMinRisk(grid)
-minRisk = maxRisk
+maxPossibleRisk = getInitialMinRisk(grid)
+minRisk = maxPossibleRisk
 
 riskGrid = {} 
 path = {}
 
-start2 = time.time()
 solve( grid)
-end2 = time.time()
 
-print( minPointRisks[ ( gridSizeX - 1, gridSizeY - 1)])
-print( end2 - start2)
+print( "Result Task 2: ", minPointRisks[ ( gridSizeX - 1, gridSizeY - 1)])
 
