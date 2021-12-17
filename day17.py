@@ -9,10 +9,7 @@ with open( "17.data", "r") as file:
     lines.append( line.rstrip())
 file.close()
 
-(dummy, xRange, yRange) = lines[0].replace( ', ', ': ').replace('=', '..').split( ': ')
-(dummy, targetXMin, targetXMax) = xRange.split( '..')
-(dummy, targetYMin, targetYMax) = yRange.split( '..')
-
+(dummy, targetXMin, targetXMax, dummy, targetYMin, targetYMax) = lines[0].replace( ', ', '..').replace('=', '..').split( '..')
 targetXMin, targetXMax, targetYMin, targetYMax = [ int(x) for x in [ targetXMin, targetXMax, targetYMin, targetYMax]]
 
 vX0min = int((( 8 * targetXMin + 1) ** 0.5 - 1) // 2)  # Gauss inverted
