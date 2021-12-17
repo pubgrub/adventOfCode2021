@@ -22,18 +22,10 @@ maxPossYVel0 = abs(targetYMin)
 
 #Task 1 + 2
 
-yVel0 = minPossYVel0 - 1
 bestY = 0
 solutions = 0
-while True:
-    yVel0 += 1
-    if yVel0 > maxPossYVel0:
-        break
-    xVel0 = minPossXVel0
-    while True:
-        xVel0 += 1
-        if xVel0 > maxPossXVel0:
-            break
+for yVel0 in range( minPossYVel0, maxPossYVel0 + 1):
+    for xVel0 in range( minPossXVel0, maxPossXVel0 + 1):
         y = x = 0
         xVel = xVel0
         yVel = yVel0
@@ -41,8 +33,7 @@ while True:
         while True:
             x += xVel
             y += yVel
-            if y > bestLocalY:
-                bestLocalY = y
+            bestLocalY = max( bestLocalY, y)
             xVel = max( 0, xVel - 1)
             yVel -= 1
             if x > targetXMax or y < targetYMin:
@@ -50,8 +41,7 @@ while True:
             if x >= targetXMin and x <= targetXMax and y >= targetYMin and y <= targetYMax:
                 # in Target
                 solutions += 1
-                if bestLocalY > bestY:
-                    bestY = bestLocalY
+                bestY = max( bestY, bestLocalY)
                 break
 
 print( "Result Task 1: ", bestY)
