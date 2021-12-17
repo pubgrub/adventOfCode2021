@@ -15,27 +15,27 @@ file.close()
 
 targetXMin, targetXMax, targetYMin, targetYMax = [ int(x) for x in [ targetXMin, targetXMax, targetYMin, targetYMax]]
 
-minPossXVel0 = int( ((1 + 8 * targetXMin) ** 0.5 -1) // 2)  # Gauss inverted
-maxPossXVel0 = targetXMax
-minPossYVel0 = targetYMin
-maxPossYVel0 = abs(targetYMin)
+vX0min = int((( 8 * targetXMin + 1) ** 0.5 - 1) // 2)  # Gauss inverted
+vX0max = targetXMax
+vY0min = targetYMin
+vY0max = abs(targetYMin)
 
 #Task 1 + 2
 
 bestY = 0
 solutions = 0
-for yVel0 in range( minPossYVel0, maxPossYVel0 + 1):
-    for xVel0 in range( minPossXVel0, maxPossXVel0 + 1):
+for vY0 in range( vY0min, vY0max + 1):
+    for vX0 in range( vX0min, vX0max + 1):
         y = x = 0
-        xVel = xVel0
-        yVel = yVel0
+        vX = vX0
+        vY = vY0
         bestLocalY = 0
         while True:
-            x += xVel
-            y += yVel
+            x += vX
+            y += vY
             bestLocalY = max( bestLocalY, y)
-            xVel = max( 0, xVel - 1)
-            yVel -= 1
+            vX = max( 0, vX - 1)
+            vY -= 1
             if x > targetXMax or y < targetYMin:
                 break
             if x >= targetXMin and x <= targetXMax and y >= targetYMin and y <= targetYMax:
