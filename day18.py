@@ -4,7 +4,7 @@
 #get input data
 
 lines = []
-with open( "18test.data", "r") as file:
+with open( "18.data", "r") as file:
   for line in file:
     lines.append( line.rstrip())
 file.close()
@@ -35,8 +35,17 @@ class Number:
   def __init__( self, parent):
     self.children = []
     self.parent = parent
+    self.magnitude = 0
     if parent.__class__ == Number:
       parent.addChild( self)
+
+  def getMagnitude(self):
+    mag = 0
+    mult = [ 3, 2]
+    for i in range( len(self.children)):
+      c = self.children[i]
+      mag += mult[ i] * (c if c.__class__ == int else c.getMagnitude())
+    return mag
 
   def getLeftChild( self):
     return self.children[0]
@@ -54,7 +63,25 @@ class Number:
     self.children.append( child)
 
   def reduce( self):
-    {}
+    changed = True
+    while changed:
+      changed = False
+      toExplode = self.searchForExplodingNumber()
+      if toExplode:
+        #print( "before ex: ", self.oneLineString(True), " -> ", toExplode.oneLineString())
+        toExplode.explodeNumber()
+        #print( "after  ex: ", self.oneLineString())
+        #print( "after  ex: ", self.oneLineString(True))
+
+        changed = True
+        continue
+      toSplit = self.searchForSplittingNumber()
+      if toSplit:
+        #print( "before sp: ", self.oneLineString(), " -> ", toSplit.oneLineString())
+        toSplit.splitNumber()
+        #print( "after  sp: ", self.oneLineString())
+        changed = True
+
 
   def searchForExplodingNumber( self, lvl = 0):
     if lvl == 4:
@@ -76,8 +103,8 @@ class Number:
         self.parent.children[i] = 0
 
   def addExplodeValue(  self, lr, upDown, value, sender):
-      if upDown:
-        print( "***", lr, upDown, value, self.children)
+      if upDown: #going up
+        #print( "***", lr, upDown, value, self.children)
         if self.children[ lr].__class__  != Number:
           self.children[ lr] += value
           return
@@ -89,9 +116,9 @@ class Number:
             return
         else:
           # changing direction, going down
+          dir = lr
           lr = 1 - lr
           upDown = 0
-          dir = lr if self.children[ lr] != sender else 1 - lr
           self.children[ dir].addExplodeValue( lr, upDown, value, self)
       else:
         if self.children[ lr].__class__ != Number:
@@ -105,9 +132,9 @@ class Number:
     found = False
     for i in self.children:
       if i.__class__ == int:
-        print( "found int")
+        #print( "found int")
         if i > 9:
-          print( "found >9")
+          #print( "found >9")
           return self
       else:
         found = i.searchForSplittingNumber()
@@ -130,8 +157,12 @@ class Number:
         return
 
   def addNumber( self, num):
-    {}
-
+    newNumber = Number( None)
+    newNumber.addChild( self)
+    newNumber.addChild( num)
+    self.parent = newNumber
+    num.parent = newNumber
+    return newNumber
 
   def __str__( self, level = 0):
     ret = "\t" * level + "Number:\n"
@@ -144,28 +175,65 @@ class Number:
       ret += self.oneLineString()
     return ret
 
-  def oneLineString(self):
+  def oneLineString(self, colored = False):
     ret = '['
     for c in range( len(self.children)):
       ret += self.children[ c].oneLineString() if self.children[ c].__class__ == Number else str( self.children[ c])
       if c == 0:
         ret += ','
     ret += ']'
+
+    if colored:
+      # color coding
+      lvl = 0
+      color = {}
+      colorString = [ "\033[1;31m", "\033[1;34m"]
+      colorOffString = "\033[0;0m"
+      for c in range( len( ret)):
+        if ret[c] == ']':
+          lvl -= 1
+        if ret[c] == '[':
+          lvl += 1
+          if lvl >= 5:
+            color[ c] = 0
+        if ret[c].isdigit() and ret[c+1].isdigit():
+          color[ c] = 1
+          color[ c + 1] = 1
+
+      for r in reversed(sorted( color)):
+        ret = ret[:r] + colorString[ color[ r]] + ret[r] + colorOffString + ret[r+1:]
+        #if color:
+          #print( ret)
+
     return ret
 
 
+#Task 1
 
 l = lines[0]
-print( l)
 tree = Number.buildTree( l, None)
 
-print( tree)
+for l in lines[ 1:]:
+  addTree = Number.buildTree( l, None)
+  #print( "both:  ", tree.oneLineString(), addTree.oneLineString())
+  tree = tree.addNumber( addTree)
+  #print( "added: ", tree.oneLineString())
+  tree.reduce()
+  #print( "redcd: ", tree.oneLineString())
+#print( tree)
+print( "Result Task 1: ", tree.getMagnitude())
 
-# explode = tree.searchForExplodingNumber()
-# print( "explode: \n", explode)
-# if explode:
-#   explode.explodeNumber()
-toSplit = tree.searchForSplittingNumber()
-print( "toSplit: ", toSplit)
-toSplit.splitNumber()
-print( tree)
+#Task 2
+
+maxMagnitude = 0
+for i in lines:
+  for j in lines:
+    if j == i:
+      continue
+    num1 = Number.buildTree( i, None)
+    num2 = Number.buildTree( j, None)
+    num = num1.addNumber( num2)
+    num.reduce()
+    mag = num.getMagnitude()
+    maxMagnitude = max( maxMagnitude, mag)
+print( "Result Task 2: ", maxMagnitude)
