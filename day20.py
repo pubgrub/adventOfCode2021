@@ -18,7 +18,6 @@ for c in range( len( lines[0])):
 
 width = len(lines[2])
 
-
 line = 0
 for l in lines[ 2:]:
   for c in range( len( l)):
@@ -28,20 +27,29 @@ for l in lines[ 2:]:
 
 height = line
 
-def process( pixel):
-  newPixel = {}
-  for l in range( -10, height + 10):
-    for c in range( -10, width + 10):
-      v = 0
-      for yGrid in range( l - 1, l + 2):
-        for xGrid in range( c - 1, c + 2):
-          if ( yGrid, xGrid ) in pixel:
-            v += 1
-          v *= 2
-      if v in algorithm:
-        newPixel[ ( l, c)] = 1
+def process( oldGrid, x0, y0, w, h, loops):
+  for l in range( loops):
+    newPixel = {}
+    ymin = y0 - l - 1
+    ymax = y0 + h + l
+    xmin = x0 - l - 1
+    xmax = x0 + w + l
+    isEvenLoop = True if l // 2 == (l + 1) // 2 else False
+    for y in range( ymin, ymax + 1):
+      for x in range( xmin, xmax + 1):
+        v = 0
+        for yGrid in range( y - 1, y + 2):
+          for xGrid in range( x - 1, x + 2):
+            if ( yGrid, xGrid ) in oldGrid or (not isEvenLoop and ( yGrid <= ymin or yGrid >= ymax  or xGrid <= xmin or xGrid >= xmax )):
+              v += 1
+            v *= 2
+        v //= 2
+        if v in algorithm:
+          newPixel[ ( y, x)] = 1
+    oldGrid = newPixel.copy()
   return newPixel
 
+# for debugging
 def printGrid( grid):
   minX =  minY = 1000 
   maxX =  maxY = -1000
@@ -57,10 +65,15 @@ def printGrid( grid):
       else: 
         print( ".", end='')
     print()
+  print( minY, maxY, minX, maxX)
 
-p = process( pixel)
-printGrid( p)
-p = process( p)
-print()
-printGrid( p)
-print( len(p))
+# Task 1
+
+p = process( pixel, 0, 0, width, height, 2)
+print( "Result Task 1: ", len(p))
+
+# Task 2
+
+p = process( pixel, 0, 0, width, height, 50)
+print( "Result Task 2: ", len(p))
+
