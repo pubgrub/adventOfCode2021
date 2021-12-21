@@ -47,7 +47,7 @@ print( "Result Task 1: ", score[ loser] * rolled)
 
 # Task 2
 
-winGrid = {}
+winList = {}
 
 def roll( player, playerPos,  dice, numRoll, score):
   playerPos = playerPos.copy()
@@ -67,17 +67,17 @@ def roll( player, playerPos,  dice, numRoll, score):
     player = 1 - player
   numRoll += 1
 
-  localWins = [ 0, 0]
+  wins = [ 0, 0]
   for d in range( 1, 4):
-    if ( player, tuple( playerPos), tuple( score), d, numRoll) in winGrid:
-      lastWins = winGrid[ ( player, tuple( playerPos), tuple( score), d, numRoll)]
+    if ( player, tuple( playerPos), tuple( score), d, numRoll) in winList:
+      loopWins = winList[ ( player, tuple( playerPos), tuple( score), d, numRoll)]
     else:
-      lastWins = roll( player, playerPos, d, numRoll, score)
-      winGrid[ ( player, tuple( playerPos), tuple( score), d, numRoll)] = lastWins
-    localWins[0] += lastWins[0]
-    localWins[1] += lastWins[1]
+      loopWins = roll( player, playerPos, d, numRoll, score)
+      winList[ ( player, tuple( playerPos), tuple( score), d, numRoll)] = loopWins
+    wins[0] += loopWins[0]
+    wins[1] += loopWins[1]
   
-  return localWins 
+  return wins 
 
 playerPos = startPos.copy()
 score = startScore.copy()
