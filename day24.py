@@ -62,10 +62,11 @@ div = [ 1, 1, 1, 26, 1, 26, 26,1, 26, 1, 1, 26, 26, 26]
 add_x = [ 11, 11, 15, -14, 10, 0, -6, 13, -3, 13, 15, -2, -9, -2]
 add_y = [ 6, 14, 13, 1, 6, 13, 6, 3, 8, 14, 4, 7, 15, 1]
 
-for z in reversed( range(1000000)):
+for z in reversed( range(1000)):
   z_orig = z
   for w in range( 1, 10):
-    x = z_orig % 26
+    z = z_orig
+    x = z % 26
     z = z // div[ -1]
     x += add_x[ -1]
     if x == w:
