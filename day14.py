@@ -5,82 +5,61 @@
 
 lines = []
 with open( "14.data", "r") as file:
-  for line in file:
-    lines.append( line.rstrip())
+    for line in file:
+        lines.append( line.rstrip())
 file.close()
 
-primer = list( lines[0])
+primer = lines[0]
 
-insertions = {}
-insertions2 = {}
-for l in lines[ 2:]:
-    ( pair, ins) = l.split( ' -> ') 
-    (x, y) = list( pair)
-    insertions[ (x, y)]= ins
-    insertions2[ pair] = ins
+def solve( runs):
+    pairs = []
+    subst = {}
+    insertChar = {}
+    charCount = {}
 
-def polymerToStr( poly, next):
-    str = ""
-    i = 0
-    while i != -1:
-        str += poly[ i] + " "
-        i = next[ i]
-    return str        
+    # make substitute table
+    for l in lines[ 2:]:
+        ( pair, ins) = l.split( ' -> ') 
+        (x, y) = list( pair)
+        subst[pair] = [ x + ins, ins + y]
+        insertChar[pair] = ins
 
-
-
-def getPolymerSlow( polymer, steps):
-    nextPiece = []
+    # load primer
+    orig_pairs = {}
+    dest_pairs = {}
     for i in range( len(primer) - 1):
-        nextPiece.append(  i + 1)
-    nextPiece.append( -1)
+        if not primer[ i:i+2] in orig_pairs:
+            orig_pairs[ primer[i:i+2]] = 1
+        else:
+            orig_pairs[ primer[i:i+2]] += 1
+    for i in range( len(primer)):
+        if not primer[i] in charCount:
+            charCount[primer[i]] = 1
+        else:
+            charCount[primer[i]] += 1
 
-    tempP = polymer.copy()
-    tempN = nextPiece.copy()
-    for s in range( steps):
-        print( "STep: ", s)
-        for p in range( len( polymer)):
-            if nextPiece[ p] == -1:
-                continue
-            actPiece = polymer[ p]
-            rightPiece = polymer[ nextPiece[ p]]
-            if ( actPiece, rightPiece) in insertions:
-                tempP.append( insertions[ ( actPiece, rightPiece)])
-                nextPiece.append(  nextPiece[ p])
-                nextPiece[ p] = len( tempP)- 1
-        polymer = tempP.copy()
-    return polymer
-
-def getCounts( polymer):
-    count = {}
-    for i in polymer:
-        count[ i] = count.get( i, 0) + 1
-    minC = maxC = 0
-    for c in count.values():
-        minC = c if minC == 0 else min( minC, c)
-        maxC = max( maxC, c)
-    return( ( minC, maxC))
+    #run
+    for r in range(runs):
+        for i in orig_pairs:
+            for sub in subst[ i]:
+                if not sub in dest_pairs:
+                    dest_pairs[sub] = orig_pairs[i]
+                else:
+                    dest_pairs[sub] += orig_pairs[i]
+            if not insertChar[i] in charCount:
+                charCount[ insertChar[i]] = orig_pairs[i]
+            else:
+                charCount[ insertChar[i]] += orig_pairs[i]    
+        orig_pairs = dest_pairs.copy()
+        dest_pairs.clear()
+    
+    return max(charCount.values()) - min(charCount.values())
 
 #Task 1
 
-polymer = getPolymerSlow( primer, 10)
-( minC, maxC) = getCounts( polymer)
-
-print( "Result Task 1: ", maxC - minC)
+print( "Result Task 1: ", solve( 10))
 
 #Task 2
 
-# polymer = getPolymerSlow( primer, 40)
-# ( minC, maxC) = getCounts( polymer)
+print( "Result Task 2: ", solve( 40))
 
-# print( "Result Task 2: ", maxC - minC)
-
-results = {}
-for i in insertions2:
-    results[ ( i)] = i[0] + insertions2[i] + i[1]
-
-
-
-
-#print( insertions2)
-print( results)
