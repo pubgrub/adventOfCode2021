@@ -12,22 +12,20 @@ file.close()
 bitStream = ''
 bitStream = ''.join( [bin(int(x, 16))[2:].zfill(4) for x in list(lines[0]) ])
 
-
-# with open( "16bin.data", "w") as ofile:
-#   ofile.write( bitstream)
-# ofile.close()
-
-
-
 class Packet:
 
-  OPERATOR = 1
+  SUM = 0
+  PRODUCT = 1
+  MINIMUM = 2
+  MAXIMUM = 3
   LITERAL = 4
+  GREATER_THAN = 5
+  LESS_THAN = 6
+  EQUAL_TO = 7
 
   version = 0
   type = ''
   
-
   def __new__( cls, bitStream):
     self = object.__new__( cls)
 
@@ -69,14 +67,37 @@ class Packet:
     else:
       return self.version + sum(p.getSumOfVersions() for p in self.subPackets)
 
+  def getValueOfOperatorPacket( self):
+    if self.type == Packet.LITERAL:
+      return self.value
+    else:
+      values = [p.getValueOfOperatorPacket() for p in self.subPackets]
+      if self.type == self.SUM:
+        return sum(values)
+      elif self.type == self.PRODUCT:
+        prod = 1
+        for v in values:
+          prod = prod * v
+        return prod
+      elif self.type == self.MINIMUM:
+        return min( values)
+      elif self.type == self.MAXIMUM:
+        return max( values)
+      elif self.type == self.GREATER_THAN:
+        return 1 if values[0] > values[1] else 0 
+      elif self.type == self.LESS_THAN:
+        return 1 if values[0] < values[1] else 0 
+      elif self.type == self.EQUAL_TO:
+        return 1 if values[0] == values[1] else 0 
 
-
-print( bitStream)
-print( len(lines[0]), len(bitStream))
-
+# fill classes from bitstream
 (firstPacket, bitStream) = Packet( bitStream)
 
-print( firstPacket.getSumOfVersions())
-exit(0)
+# Task 1
+print( "Result Task 1: ", firstPacket.getSumOfVersions())
+
+# Task 2
+print( "Result Task 2: ", firstPacket.getValueOfOperatorPacket())
+
 
 
