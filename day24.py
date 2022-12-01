@@ -62,19 +62,45 @@ div = [ 1, 1, 1, 26, 1, 26, 26,1, 26, 1, 1, 26, 26, 26]
 add_x = [ 11, 11, 15, -14, 10, 0, -6, 13, -3, 13, 15, -2, -9, -2]
 add_y = [ 6, 14, 13, 1, 6, 13, 6, 3, 8, 14, 4, 7, 15, 1]
 
+div = list(reversed( div))
+add_x = list(reversed( add_x))
+add_y = list(reversed( add_y))
+
+zsolutions = [{}]
+
+print( "new approach")
 for z in reversed( range(1000)):
   z_orig = z
   for w in range( 1, 10):
     z = z_orig
-    x = z % 26
-    z = z // div[ -1]
-    x += add_x[ -1]
-    if x == w:
-      x = 0
-    else: 
-      x = 1
-    z *= 25 * x + 1
-    y = ( w + add_y[ -1]) * x
-    z += y
+    x = z % 26 
+    z = z // div[0]
+    x += add_x[0]
+    x = 0 if x == w else 1
+    z *=  25 * x + 1
+    z += ( w + add_y[0]) * x
     if z == 0:
-      print( z_orig, z, w )
+      zsolutions[0][z_orig] = w
+
+zmax = [0] * 14
+
+#for lvl in range( 1, 12):
+for lvl in range( 1, 7):
+  zsolutions.append( {})
+  for z in reversed( range(100 * 10 ** lvl)):
+    z_orig = z
+    for w in range( 1, 10):
+      z = z_orig
+      x = z % 26 
+      z = z // div[0]
+      x += add_x[0]
+      x = 0 if x == w else 1
+      z *=  25 * x + 1
+      z += ( w + add_y[0]) * x
+      if z in zsolutions[ lvl - 1]:
+        zsolutions[lvl][z_orig] = w * 10 ** lvl + zsolutions[ lvl - 1][z]
+        zmax[ lvl] = max( z_orig, zmax[ lvl])
+  print( zsolutions[lvl])
+  print( zmax)
+  
+
