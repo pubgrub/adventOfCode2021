@@ -13,10 +13,10 @@ costPerStep = {'A': 1, 'B': 10, 'C': 100, 'D':1000}
 
 #bit numbering (index in coordBits (x,y))
 #  8  9   10   11   12   13  14
-#       0    2    4    6
-#       1    3    5    7
-coordBits = [ (2,1), (2,2), (4,1), (4,2),
-              (6,1), (6,2), (8,1), (8,2),
+#       4    5    6    7
+#       0    1    2    3
+coordBits = [ (2,2) ,(4,2), (6,2), (8,2),  
+              (2,1), (4,1), (6,1), (8,1), 
               (0,0), (1,0), (3,0), (5,0),
               (7,0), (9,0), (10,0)]
 
@@ -52,6 +52,7 @@ occupied = 0
 
 #list of players
 players = []
+playerInRow2 = []
 
 for y,l in enumerate( lines[1:4]):
   for x,char in enumerate( list(l)[1:]):
@@ -59,7 +60,8 @@ for y,l in enumerate( lines[1:4]):
       posNumber = 2 ** coordBits.index( (x,y))
       players.append( { 'name': char, 'pos': 2 ** posNumber , 'completed': False, 'cost': costPerStep[ char]})
       occupied += posNumber
-
+      if y == 2:
+        playerInRow2.append( char)
 #this number indicates all players in room
 allRoomsOccupied = occupied
 
@@ -92,7 +94,7 @@ for start in numberToBinaryPositions( possDests):
     routes[ ( end, start)] = route
 
 
-def solve( players):
+def solve( players,cost):
   cost = 0
   for i, p in enumerate(players):
       name = p['name']    
@@ -101,7 +103,7 @@ def solve( players):
       else:
         stops= possStops
       for dest in numberToBinaries( stops):
-        if dest & possDests and dest
+
 
 
 result = solve( players)
