@@ -57,9 +57,9 @@ playerInRow2 = []
 for y,l in enumerate( lines[1:4]):
   for x,char in enumerate( list(l)[1:]):
     if char in "ABCD":
-      posNumber = 2 ** coordBits.index( (x,y))
-      players.append( { 'name': char, 'pos': 2 ** posNumber , 'completed': False, 'cost': costPerStep[ char]})
-      occupied += posNumber
+      pos = coordBits.index( (x,y))
+      players.append( { 'name': char, 'pos': pos , 'completed': False, 'cost': costPerStep[ char]})
+      occupied += 2 ** pos
       if y == 2:
         playerInRow2.append( char)
 #this number indicates all players in room
@@ -94,11 +94,24 @@ for start in numberToBinaryPositions( possDests):
     routes[ ( end, start)] = route
 
 
-def solve( players,cost):
-  cost = 0
+minSolveCost = -1
+
+def solve( players, cost, player , toPos):
+  if player >= 0:
+    oldOccupied = occupied
+    occupied -= 2 ** players[ player][ 'pos']
+    occupied >= 2 ** toPos
+    cost += players[player]['cost']
+    if occupied == allRoomsOccupied:
+      # solved
+      if minSolveCost >= 0 and cost < minSolveCost:
+        minSolveCost = cost
+        occupied = oldOccupied
+        return 
+        
   for i, p in enumerate(players):
       name = p['name']    
-      if p['pos'] & possStops: 
+      if 2 ** p['pos'] & possStops: 
         stops = possDests
       else:
         stops= possStops
@@ -106,7 +119,7 @@ def solve( players,cost):
 
 
 
-result = solve( players)
+result = solve( players, 0, -1, -1)
 
 print( possStops)
 print( possDests)
